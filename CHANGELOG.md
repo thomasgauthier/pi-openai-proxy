@@ -1,3 +1,10 @@
+## [4.9.4](https://github.com/victor-software-house/pi-openai-proxy/compare/v4.9.3...v4.9.4) (2026-05-06)
+
+
+### Bug Fixes
+
+* update proxy for pi 0.73 ([6b9a080](https://github.com/victor-software-house/pi-openai-proxy/commit/6b9a080ac1756052f3b51ac49956388cf18e5c20))
+
 ## [4.9.3](https://github.com/victor-software-house/pi-openai-proxy/compare/v4.9.2...v4.9.3) (2026-03-29)
 
 
