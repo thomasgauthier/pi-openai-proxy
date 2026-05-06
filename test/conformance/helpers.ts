@@ -41,8 +41,8 @@ const TEST_MODEL_MATRIX: readonly TestModel[] = [
 
 	// OpenAI / Codex
 	{ id: "openai-codex/gpt-5.4-mini", category: "fast" },
-	{ id: "openai-codex/gpt-5.1-codex-mini", category: "mid" },
-	{ id: "openai-codex/gpt-5.2-codex", category: "reasoning" },
+	{ id: "openai-codex/gpt-5.5", category: "mid" },
+	{ id: "openai-codex/gpt-5.5", category: "reasoning" },
 ];
 
 let resolvedModels: Map<string, TestModel> | undefined;

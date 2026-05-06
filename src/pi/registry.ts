@@ -19,8 +19,8 @@ let settingsManager: SettingsManager | undefined;
  */
 export function initRegistry(): string | undefined {
 	authStorage = AuthStorage.create();
-	registry = new ModelRegistry(authStorage);
-	settingsManager = SettingsManager.create();
+	registry = ModelRegistry.create(authStorage);
+	settingsManager = SettingsManager.create(process.cwd());
 	return registry.getError();
 }
 
@@ -71,7 +71,8 @@ export async function getRequestAuth(model: Model<Api>) {
  *
  * Returns undefined when no filter is configured (all models enabled).
  */
-export function getEnabledModels(): readonly string[] | undefined {
-	getSettingsManager().reload();
-	return getSettingsManager().getEnabledModels();
+export async function getEnabledModels(): Promise<readonly string[] | undefined> {
+	const manager = getSettingsManager();
+	await manager.reload();
+	return manager.getEnabledModels();
 }

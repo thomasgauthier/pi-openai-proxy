@@ -10,8 +10,7 @@
 import type { Tool } from "@mariozechner/pi-ai";
 import { jsonSchemaToTypebox } from "@proxy/openai/json-schema-to-typebox";
 import type { OpenAIFunctionTool } from "@proxy/openai/schemas";
-import type { TSchema } from "@sinclair/typebox";
-import { Type } from "@sinclair/typebox";
+import { type TSchema, Type } from "typebox";
 
 export interface ToolConversionSuccess {
 	readonly ok: true;

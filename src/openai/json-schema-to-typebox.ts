@@ -25,8 +25,7 @@
  */
 
 import { isRecord } from "@proxy/utils/guards";
-import type { TSchema } from "@sinclair/typebox";
-import { Type } from "@sinclair/typebox";
+import { type TSchema, Type } from "typebox";
 
 export interface SchemaConversionSuccess {
 	readonly ok: true;

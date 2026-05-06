@@ -1,6 +1,13 @@
 import { describe, expect, test } from "bun:test";
 import { convertTools } from "@proxy/openai/tools";
 
+function schemaValue(schema: unknown, key: string): unknown {
+	if (schema === null || typeof schema !== "object" || Array.isArray(schema)) {
+		return undefined;
+	}
+	return Object.getOwnPropertyDescriptor(schema, key)?.value;
+}
+
 describe("convertTools", () => {
 	test("converts a simple function tool", () => {
 		const result = convertTools([
@@ -28,7 +35,7 @@ describe("convertTools", () => {
 		if (tool === undefined) return;
 		expect(tool.name).toBe("get_weather");
 		expect(tool.description).toBe("Get the weather for a city");
-		expect(tool.parameters["type"]).toBe("object");
+		expect(schemaValue(tool.parameters, "type")).toBe("object");
 	});
 
 	test("converts a tool without parameters", () => {
@@ -48,7 +55,7 @@ describe("convertTools", () => {
 		expect(tool).toBeDefined();
 		if (tool === undefined) return;
 		expect(tool.name).toBe("list_all");
-		expect(tool.parameters["type"]).toBe("object");
+		expect(schemaValue(tool.parameters, "type")).toBe("object");
 	});
 
 	test("converts multiple tools", () => {

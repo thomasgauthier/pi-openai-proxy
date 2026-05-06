@@ -94,24 +94,24 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 	// --- Model registry access (cached, refreshed per call) ---
 
 	const cachedAuth = AuthStorage.create();
-	const cachedRegistry = new ModelRegistry(cachedAuth);
-	const settingsManager = SettingsManager.create();
+	const cachedRegistry = ModelRegistry.create(cachedAuth);
+	const settingsManager = SettingsManager.create(process.cwd());
 
 	function getAvailableModels(): Model<Api>[] {
 		cachedRegistry.refresh();
 		return cachedRegistry.getAvailable();
 	}
 
-	function getEnabledModels(): readonly string[] | undefined {
-		settingsManager.reload();
+	async function getEnabledModels(): Promise<readonly string[] | undefined> {
+		await settingsManager.reload();
 		return settingsManager.getEnabledModels();
 	}
 
-	function buildExposureConfig(): ModelExposureConfig {
+	async function buildExposureConfig(): Promise<ModelExposureConfig> {
 		return {
 			publicModelIdMode: config.publicModelIdMode,
 			modelExposureMode: config.modelExposureMode,
-			enabledModels: getEnabledModels(),
+			enabledModels: await getEnabledModels(),
 			customModels: config.customModels,
 			providerPrefixes: config.providerPrefixes,
 		};
@@ -137,7 +137,7 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 
 	pi.on("session_start", async (_event, ctx) => {
 		config = loadConfigFromFile();
-		maybeAutoSyncZed(ctx);
+		await maybeAutoSyncZed(ctx);
 		await refreshStatus(ctx);
 	});
 
@@ -193,16 +193,16 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 					await showStatus(ctx);
 					return;
 				case "verify":
-					verifyExposure(ctx);
+					await verifyExposure(ctx);
 					return;
 				case "models":
-					showModels(ctx);
+					await showModels(ctx);
 					return;
 				case "zed-sync":
-					handleZedSync(ctx, args);
+					await handleZedSync(ctx, args);
 					return;
 				case "show":
-					showConfig(ctx);
+					await showConfig(ctx);
 					return;
 				case "path":
 					ctx.ui.notify(getConfigPath(), "info");
@@ -460,7 +460,7 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 		await refreshStatus(ctx);
 	}
 
-	function showConfig(ctx: ExtensionContext): void {
+	async function showConfig(ctx: ExtensionContext): Promise<void> {
 		config = loadConfigFromFile();
 		const authDisplay =
 			config.authToken.length > 0 ? `enabled (token: ${config.authToken})` : "disabled";
@@ -483,7 +483,7 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 		];
 
 		if (config.modelExposureMode === "scoped") {
-			const enabledModels = getEnabledModels();
+			const enabledModels = await getEnabledModels();
 			if (enabledModels !== undefined && enabledModels.length > 0) {
 				exposureLines.push(`enabled: ${String(enabledModels.length)} pi model(s)`);
 			}
@@ -500,7 +500,7 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 
 		// Public ID preview (first 5 exposed models)
 		const models = getAvailableModels();
-		const outcome = computeModelExposure(models, buildExposureConfig());
+		const outcome = computeModelExposure(models, await buildExposureConfig());
 		if (outcome.ok && outcome.models.length > 0) {
 			const preview = outcome.models.slice(0, 5).map((m) => m.publicId);
 			const suffix =
@@ -517,10 +517,10 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 
 	// --- /proxy models ---
 
-	function showModels(ctx: ExtensionContext): void {
+	async function showModels(ctx: ExtensionContext): Promise<void> {
 		config = loadConfigFromFile();
 		const models = getAvailableModels();
-		const outcome = computeModelExposure(models, buildExposureConfig());
+		const outcome = computeModelExposure(models, await buildExposureConfig());
 
 		if (!outcome.ok) {
 			ctx.ui.notify(`Model exposure error: ${outcome.message}`, "warning");
@@ -562,7 +562,7 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 
 	// --- /proxy verify ---
 
-	function verifyExposure(ctx: ExtensionContext): void {
+	async function verifyExposure(ctx: ExtensionContext): Promise<void> {
 		config = loadConfigFromFile();
 		const models = getAvailableModels();
 		const issues: string[] = [];
@@ -586,7 +586,7 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 		}
 
 		// Run the full exposure computation to catch ID/prefix errors
-		const outcome = computeModelExposure(models, buildExposureConfig());
+		const outcome = computeModelExposure(models, await buildExposureConfig());
 		if (!outcome.ok) {
 			issues.push(outcome.message);
 		}
@@ -607,9 +607,9 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 	/**
 	 * Run Zed sync and return the result. Shared by the command and auto-sync.
 	 */
-	function runZedSync(dryRun: boolean): { ok: boolean; message: string } {
+	async function runZedSync(dryRun: boolean): Promise<{ ok: boolean; message: string }> {
 		const available = getAvailableModels();
-		const outcome = computeModelExposure(available, buildExposureConfig());
+		const outcome = computeModelExposure(available, await buildExposureConfig());
 		if (!outcome.ok) {
 			return { ok: false, message: `Model exposure error: ${outcome.message}` };
 		}
@@ -634,19 +634,19 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 		return { ok: true, message: `${prefix}${result.summary} (${result.configPath})` };
 	}
 
-	function handleZedSync(ctx: ExtensionContext, args: string): void {
+	async function handleZedSync(ctx: ExtensionContext, args: string): Promise<void> {
 		config = loadConfigFromFile();
 		const dryRun = args.includes("--dry-run");
-		const result = runZedSync(dryRun);
+		const result = await runZedSync(dryRun);
 		ctx.ui.notify(`Zed sync: ${result.message}`, result.ok ? "info" : "error");
 	}
 
 	/**
 	 * Trigger auto-sync to Zed if enabled. Called after config save.
 	 */
-	function maybeAutoSyncZed(ctx: ExtensionContext): void {
+	async function maybeAutoSyncZed(ctx: ExtensionContext): Promise<void> {
 		if (!config.zed.autoSync) return;
-		const result = runZedSync(false);
+		const result = await runZedSync(false);
 		if (result.ok) {
 			ctx.ui.notify(`Zed auto-sync: ${result.message}`, "info");
 		}
@@ -1106,7 +1106,7 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 							settingsList.updateValue("customModels", customModelsDisplay());
 						}
 
-						maybeAutoSyncZed(ctx);
+						void maybeAutoSyncZed(ctx);
 						tui.requestRender();
 					},
 					() => done(undefined),

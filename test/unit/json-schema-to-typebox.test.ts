@@ -1,41 +1,48 @@
 import { describe, expect, test } from "bun:test";
 import { jsonSchemaToTypebox } from "@proxy/openai/json-schema-to-typebox";
 
+function schemaValue(schema: unknown, key: string): unknown {
+	if (schema === null || typeof schema !== "object" || Array.isArray(schema)) {
+		return undefined;
+	}
+	return Object.getOwnPropertyDescriptor(schema, key)?.value;
+}
+
 describe("jsonSchemaToTypebox", () => {
 	describe("primitive types", () => {
 		test("converts string type", () => {
 			const result = jsonSchemaToTypebox({ type: "string" });
 			expect(result.ok).toBe(true);
 			if (!result.ok) return;
-			expect(result.schema["type"]).toBe("string");
+			expect(schemaValue(result.schema, "type")).toBe("string");
 		});
 
 		test("converts number type", () => {
 			const result = jsonSchemaToTypebox({ type: "number" });
 			expect(result.ok).toBe(true);
 			if (!result.ok) return;
-			expect(result.schema["type"]).toBe("number");
+			expect(schemaValue(result.schema, "type")).toBe("number");
 		});
 
 		test("converts integer type", () => {
 			const result = jsonSchemaToTypebox({ type: "integer" });
 			expect(result.ok).toBe(true);
 			if (!result.ok) return;
-			expect(result.schema["type"]).toBe("integer");
+			expect(schemaValue(result.schema, "type")).toBe("integer");
 		});
 
 		test("converts boolean type", () => {
 			const result = jsonSchemaToTypebox({ type: "boolean" });
 			expect(result.ok).toBe(true);
 			if (!result.ok) return;
-			expect(result.schema["type"]).toBe("boolean");
+			expect(schemaValue(result.schema, "type")).toBe("boolean");
 		});
 
 		test("converts null type", () => {
 			const result = jsonSchemaToTypebox({ type: "null" });
 			expect(result.ok).toBe(true);
 			if (!result.ok) return;
-			expect(result.schema["type"]).toBe("null");
+			expect(schemaValue(result.schema, "type")).toBe("null");
 		});
 
 		test("preserves description", () => {
@@ -45,7 +52,7 @@ describe("jsonSchemaToTypebox", () => {
 			});
 			expect(result.ok).toBe(true);
 			if (!result.ok) return;
-			expect(result.schema["description"]).toBe("A name");
+			expect(schemaValue(result.schema, "description")).toBe("A name");
 		});
 	});
 
@@ -54,7 +61,7 @@ describe("jsonSchemaToTypebox", () => {
 			const result = jsonSchemaToTypebox({ type: "object" });
 			expect(result.ok).toBe(true);
 			if (!result.ok) return;
-			expect(result.schema["type"]).toBe("object");
+			expect(schemaValue(result.schema, "type")).toBe("object");
 		});
 
 		test("converts object with properties", () => {
@@ -68,8 +75,8 @@ describe("jsonSchemaToTypebox", () => {
 			});
 			expect(result.ok).toBe(true);
 			if (!result.ok) return;
-			expect(result.schema["type"]).toBe("object");
-			expect(result.schema["required"]).toContain("name");
+			expect(schemaValue(result.schema, "type")).toBe("object");
+			expect(schemaValue(result.schema, "required")).toContain("name");
 		});
 
 		test("makes non-required properties optional", () => {
@@ -83,7 +90,7 @@ describe("jsonSchemaToTypebox", () => {
 			});
 			expect(result.ok).toBe(true);
 			if (!result.ok) return;
-			expect(result.schema["type"]).toBe("object");
+			expect(schemaValue(result.schema, "type")).toBe("object");
 		});
 
 		test("rejects additionalProperties as schema object", () => {
@@ -115,14 +122,14 @@ describe("jsonSchemaToTypebox", () => {
 			});
 			expect(result.ok).toBe(true);
 			if (!result.ok) return;
-			expect(result.schema["type"]).toBe("array");
+			expect(schemaValue(result.schema, "type")).toBe("array");
 		});
 
 		test("converts array without items", () => {
 			const result = jsonSchemaToTypebox({ type: "array" });
 			expect(result.ok).toBe(true);
 			if (!result.ok) return;
-			expect(result.schema["type"]).toBe("array");
+			expect(schemaValue(result.schema, "type")).toBe("array");
 		});
 
 		test("converts nested array of objects", () => {
@@ -148,7 +155,7 @@ describe("jsonSchemaToTypebox", () => {
 			});
 			expect(result.ok).toBe(true);
 			if (!result.ok) return;
-			expect(result.schema["anyOf"]).toBeDefined();
+			expect(schemaValue(result.schema, "anyOf")).toBeDefined();
 		});
 
 		test("rejects non-string enum values", () => {
@@ -175,7 +182,7 @@ describe("jsonSchemaToTypebox", () => {
 			});
 			expect(result.ok).toBe(true);
 			if (!result.ok) return;
-			expect(result.schema["anyOf"]).toBeDefined();
+			expect(schemaValue(result.schema, "anyOf")).toBeDefined();
 		});
 
 		test("rejects multi-type arrays beyond nullable", () => {
@@ -264,7 +271,7 @@ describe("jsonSchemaToTypebox", () => {
 			});
 			expect(result.ok).toBe(true);
 			if (!result.ok) return;
-			expect(result.schema["anyOf"]).toHaveLength(2);
+			expect(schemaValue(result.schema, "anyOf")).toHaveLength(2);
 		});
 
 		test("converts simple type union via anyOf", () => {
@@ -273,7 +280,7 @@ describe("jsonSchemaToTypebox", () => {
 			});
 			expect(result.ok).toBe(true);
 			if (!result.ok) return;
-			expect(result.schema["anyOf"]).toHaveLength(2);
+			expect(schemaValue(result.schema, "anyOf")).toHaveLength(2);
 		});
 
 		test("converts anyOf with object branch", () => {
@@ -289,7 +296,7 @@ describe("jsonSchemaToTypebox", () => {
 			});
 			expect(result.ok).toBe(true);
 			if (!result.ok) return;
-			expect(result.schema["anyOf"]).toHaveLength(2);
+			expect(schemaValue(result.schema, "anyOf")).toHaveLength(2);
 		});
 
 		test("preserves description on anyOf", () => {
@@ -299,7 +306,7 @@ describe("jsonSchemaToTypebox", () => {
 			});
 			expect(result.ok).toBe(true);
 			if (!result.ok) return;
-			expect(result.schema["description"]).toBe("A timezone or null");
+			expect(schemaValue(result.schema, "description")).toBe("A timezone or null");
 		});
 
 		test("rejects empty anyOf", () => {

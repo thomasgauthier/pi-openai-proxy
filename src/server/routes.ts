@@ -42,14 +42,14 @@ import { stream as honoStream } from "hono/streaming";
  * request (<1KB JSON, negligible vs upstream API latency). Tests pass a
  * configReader that returns fixed values.
  */
-export type ExposureConfigReader = () => ModelExposureConfig;
+export type ExposureConfigReader = () => ModelExposureConfig | Promise<ModelExposureConfig>;
 
-function fileConfigReader(): ModelExposureConfig {
+async function fileConfigReader(): Promise<ModelExposureConfig> {
 	const file = loadConfigFromFile();
 	return {
 		publicModelIdMode: file.publicModelIdMode,
 		modelExposureMode: file.modelExposureMode,
-		enabledModels: getEnabledModels(),
+		enabledModels: await getEnabledModels(),
 		customModels: file.customModels,
 		providerPrefixes: file.providerPrefixes,
 	};
@@ -59,9 +59,9 @@ export function createRoutes(
 	config: ServerConfig,
 	configReader: ExposureConfigReader = fileConfigReader,
 ): Hono<ProxyEnv> {
-	function getExposure(): ModelExposureResult {
+	async function getExposure(): Promise<ModelExposureResult> {
 		const available = getAvailableModels();
-		const outcome = computeModelExposure(available, configReader());
+		const outcome = computeModelExposure(available, await configReader());
 		if (!outcome.ok) {
 			throw new Error(`Model exposure configuration error: ${outcome.message}`);
 		}
@@ -86,14 +86,14 @@ export function createRoutes(
 	const routes = new Hono<ProxyEnv>();
 
 	// --- GET /v1/models ---
-	routes.get("/v1/models", (c) => {
-		const exposure = getExposure();
+	routes.get("/v1/models", async (c) => {
+		const exposure = await getExposure();
 		return c.json(buildModelList(exposure.models));
 	});
 
 	// --- GET /v1/models/:model ---
 	// Use a wildcard to capture slash-containing model IDs
-	routes.get("/v1/models/*", (c) => {
+	routes.get("/v1/models/*", async (c) => {
 		const rawPath = c.req.path;
 		// Strip the "/v1/models/" prefix to get the full (possibly multi-segment) model ID
 		const prefix = "/v1/models/";
@@ -107,7 +107,7 @@ export function createRoutes(
 		}
 		const modelId = decodeURIComponent(modelIdEncoded);
 
-		const exposure = getExposure();
+		const exposure = await getExposure();
 		const resolved = resolveExposedModel(exposure, modelId);
 		if (resolved === undefined) {
 			return c.json(modelNotFound(modelId), 404);
@@ -142,7 +142,7 @@ export function createRoutes(
 		const request = validation.data;
 
 		// Resolve model through the exposure engine
-		const exposure = getExposure();
+		const exposure = await getExposure();
 		const resolved = resolveExposedModel(exposure, request.model);
 		if (resolved === undefined) {
 			return c.json(modelNotFound(request.model), 404);
