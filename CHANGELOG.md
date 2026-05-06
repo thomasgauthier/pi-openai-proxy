@@ -1,3 +1,10 @@
+## [4.9.5](https://github.com/victor-software-house/pi-openai-proxy/compare/v4.9.4...v4.9.5) (2026-05-06)
+
+
+### Bug Fixes
+
+* resolve bun runtime for proxy startup ([c6c2cb9](https://github.com/victor-software-house/pi-openai-proxy/commit/c6c2cb9e9b32dc842eff79ccadf313be5e5d5687))
+
 ## [4.9.4](https://github.com/victor-software-house/pi-openai-proxy/compare/v4.9.3...v4.9.4) (2026-05-06)
 
 
