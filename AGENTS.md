@@ -46,7 +46,7 @@ For detailed rationale and edge cases, defer to [`PLAN.md`](PLAN.md) instead of 
 
 ## Coding rules that matter in this repo
 
-- Runtime/tooling: **Bun + TypeScript + Hono + Zod v4 + TypeBox**.
+- Runtime/tooling: **pnpm package management + Bun runtime scripts + TypeScript + Hono + Zod v4 + TypeBox**.
 - Use import alias `@proxy/*` for `src/*`. Do **not** introduce relative imports across the source tree.
 - Use `import type` where required.
 - Use `node:` protocol for Node built-ins.
@@ -65,17 +65,17 @@ When you change code, run the smallest relevant checks first, then expand as nee
 Common commands:
 
 ```bash
-bun run typecheck
-bun run lint
-bun test
-bun run build
+pnpm run typecheck
+pnpm run lint
+pnpm test
+pnpm run build
 ```
 
 Expected discipline in this repo:
 
 - Before committing, run **lint + tests**.
-- If types were affected, run `bun run typecheck` too.
-- If packaging/runtime entrypoints changed, run `bun run build`.
+- If types were affected, run `pnpm run typecheck` too.
+- If packaging/runtime entrypoints changed, run `pnpm run build`.
 - If only docs changed, skip code checks unless the change affects documented commands or behavior.
 - In your summary, state exactly what you ran and what you did **not** run.
 
@@ -83,7 +83,7 @@ Hook-backed workflow already exists and should be preserved:
 
 - `commit-msg` -> commitlint
 - `pre-commit` -> format, lint, typecheck
-- `pre-push` -> lockfile sync check, typecheck, lint, `bun run test:ci`
+- `pre-push` -> lockfile sync check, typecheck, lint, `pnpm run test:ci`
 
 Do not weaken these hooks unless the user asks.
 

@@ -20,10 +20,10 @@ A local OpenAI-compatible HTTP proxy built on [pi](https://github.com/badlogic/p
 
 ```bash
 # Install globally
-npm install -g @victor-software-house/pi-openai-proxy
+pnpm add -g @victor-software-house/pi-openai-proxy
 
-# Or run directly with npx
-npx @victor-software-house/pi-openai-proxy
+# Or run directly
+pnpm dlx @victor-software-house/pi-openai-proxy
 ```
 
 ## Quickstart
@@ -339,17 +339,18 @@ The extension detects externally running instances and shows their status via `/
 ## Dev Workflow
 
 ```bash
-bun install           # Install dependencies
-bun run dev           # Run in development
-bun run build         # Build for npm (tsdown)
-bun run typecheck     # TypeScript strict check
-bun run lint          # Biome + oxlint (strict)
-bun test              # Run all tests
+pnpm install          # Install dependencies
+pnpm run dev          # Run in development
+pnpm run build        # Build for npm (tsdown)
+pnpm run typecheck    # TypeScript strict check
+pnpm run lint         # Biome + oxlint (strict)
+pnpm test             # Run all tests
 ```
 
 ### Tooling
 
-- **Bun** — runtime, test runner, package manager
+- **pnpm** — package manager and script runner
+- **Bun** — runtime and test runner
 - **tsdown** — npm build (ESM + .d.ts)
 - **Biome** — format + lint
 - **oxlint** — type-aware lint with strict rules (`.oxlintrc.json`)

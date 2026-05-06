@@ -1,19 +1,16 @@
 <!--
 Sync Impact Report
-Version change: 1.0.0 → 1.0.1
+Version change: 1.0.1 → 1.0.2
 Modified principles:
-- None (governance text unchanged; audit corrected downstream workflow alignment)
+- V. Release Hygiene and Traceability (package management clarified: pnpm for installs/scripts, Bun for runtime/test scripts)
 Added sections:
 - None
 Removed sections:
 - None
 Templates requiring updates:
-- ✅ .specify/templates/plan-template.md (native `/spec` references aligned)
-- ✅ .specify/templates/spec-template.md (reviewed; no changes required)
-- ✅ .specify/templates/tasks-template.md (native `/spec tasks` reference aligned)
-- ✅ .specify/templates/checklist-template.md (native `/spec checklist` reference aligned)
-- ✅ .specify/templates/commands/*.md (native `/spec` and `.specify/memory/pi-agent.md` guidance aligned)
-- ✅ .specify/memory/pi-agent.md (reviewed; no changes required)
+- ✅ .specify/memory/pi-agent.md (development commands aligned to pnpm)
+- ✅ README.md and AGENTS.md (operator workflow aligned to pnpm)
+- ✅ lefthook.yml and .github/workflows/publish.yml (hook/CI commands aligned to pnpm)
 Follow-up TODOs: none
 -->
 
@@ -61,7 +58,7 @@ Rationale: the proxy's public contract is documentation-heavy. If behavior chang
 
 ## Development Workflow and Quality Gates
 
-- Use Bun, TypeScript, Hono, Zod v4, and TypeBox as the runtime stack for this repository.
+- Use pnpm for package management, Bun for runtime scripts, and TypeScript, Hono, Zod v4, and TypeBox as the implementation stack for this repository.
 - Use the `@proxy/*` import alias for `src/*`, `node:` protocol imports for Node built-ins, and `import * as z from "zod"` for schema work.
 - Before completion, run the smallest verification that exercises the change; if types changed, run typecheck; if runtime behavior changed, run lint and tests; if packaging or entrypoints changed, run build.
 - Preserve the existing hook-backed workflow and do not weaken lint, type, or test gates unless the user explicitly asks.
@@ -90,4 +87,4 @@ Compliance review expectations:
 - Any change to stable routes, auth semantics, model resolution, validation rules, or security defaults MUST explicitly call out the affected principle(s).
 - If implementation and docs disagree, the implementation MUST be corrected or the docs amended before release.
 
-**Version**: 1.0.1 | **Ratified**: 2026-03-31 | **Last Amended**: 2026-03-31
+**Version**: 1.0.2 | **Ratified**: 2026-03-31 | **Last Amended**: 2026-05-06

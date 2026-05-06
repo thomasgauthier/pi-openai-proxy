@@ -4,7 +4,8 @@ Auto-generated from repository context. Last updated: 2026-03-31
 
 ## Active Technologies
 
-- Bun
+- pnpm package management
+- Bun runtime scripts
 - TypeScript
 - Hono
 - Zod v4
@@ -37,12 +38,12 @@ specify/
 ## Commands
 
 ```bash
-bun install
-bun run dev
-bun run build
-bun run typecheck
-bun run lint
-bun test
+pnpm install
+pnpm run dev
+pnpm run build
+pnpm run typecheck
+pnpm run lint
+pnpm test
 ```
 
 ## Code Style

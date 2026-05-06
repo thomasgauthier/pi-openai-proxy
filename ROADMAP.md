@@ -148,7 +148,7 @@ CLI args > env vars > JSON config file (`~/.pi/agent/proxy-config.json`) > defau
 
 ### Workspace setup
 
-- [ ] Bun workspace (bun workspaces, not pnpm)
+- [ ] pnpm workspace for package management (Bun remains runtime/test runner)
 - [ ] Turborepo for task orchestration
 - [ ] Shared tsconfig.base.json, biome.json, oxlintrc at root
 - [ ] Per-package build, test, typecheck tasks

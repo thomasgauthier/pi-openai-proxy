@@ -5,7 +5,7 @@ output:
 commit-msg:
   commands:
     commitlint:
-      run: bunx commitlint --edit {1}
+      run: pnpm exec commitlint --edit {1}
 
 pre-commit:
   parallel: false
@@ -13,7 +13,7 @@ pre-commit:
     format:
       stage_fixed: true
       run: |
-        output="$(bunx biome check --write {staged_files} 2>&1)"
+        output="$(pnpm exec biome check --write {staged_files} 2>&1)"
         status=$?
         printf "%s\n" "$output"
         if [ $status -ne 0 ] && printf "%s" "$output" | grep -q "No files were processed"; then
@@ -21,9 +21,9 @@ pre-commit:
         fi
         exit $status
     lint:
-      run: bun run lint
+      run: pnpm run lint
     lint-types:
-      run: bun run typecheck
+      run: pnpm run typecheck
 
 pre-push:
   parallel: false
@@ -31,23 +31,23 @@ pre-push:
     lockfile-sync:
       priority: 0
       run: |
-        bun install
-        if ! git diff --quiet -- bun.lock; then
+        pnpm install --lockfile-only
+        if ! git diff --quiet -- pnpm-lock.yaml; then
           echo ""
           echo "Lockfile is out of sync. Commit the updated lockfile before pushing:"
           echo ""
-          git diff --stat -- bun.lock
+          git diff --stat -- pnpm-lock.yaml
           echo ""
-          echo "  git add bun.lock && git commit -m 'chore: sync lockfile'"
+          echo "  git add pnpm-lock.yaml && git commit -m 'chore: sync lockfile'"
           echo ""
           exit 1
         fi
     lint-types:
       priority: 1
-      run: bun run typecheck
+      run: pnpm run typecheck
     lint:
       priority: 2
-      run: bun run lint
+      run: pnpm run lint
     test:
       priority: 3
-      run: bun run test:ci
+      run: pnpm run test:ci

@@ -28,34 +28,38 @@ jobs:
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
           node-version: lts/*
           registry-url: https://registry.npmjs.org
+          cache: pnpm
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Typecheck
-        run: bun run typecheck
+        run: pnpm run typecheck
 
       - name: Lint (Biome)
-        run: bun run lint:biome
+        run: pnpm run lint:biome
 
       - name: Lint (oxlint)
-        run: bun run lint:oxlint
+        run: pnpm run lint:oxlint
 
       - name: Test
-        run: bun run test:ci
+        run: pnpm run test:ci
 
       - name: Build
-        run: bun run build
+        run: pnpm run build
 
       - name: Verify package contents
-        run: npm pack --dry-run
+        run: pnpm pack --json --pack-destination /tmp
 
       - name: Release
-        run: bunx semantic-release
+        run: pnpm exec semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

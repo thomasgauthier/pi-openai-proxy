@@ -12,7 +12,7 @@ github.com/victor-software-house/pi-proxy
 ```
 
 Like pi-mono. Lockstep-versioned, independently published packages under the
-`@pi-proxy` npm org. Anyone can `npm install` individual packages and build
+`@pi-proxy` npm org. Anyone can `pnpm add` individual packages and build
 on top.
 
 ### Repo 2: `pi-openai-proxy` (EXISTING — becomes thin aggregator)
@@ -114,7 +114,7 @@ The proxy server. The only package with a build step (tsdown). Published with
     "test": "bun test"
   },
   "dependencies": {
-    "@sinclair/typebox": "catalog:",
+    "typebox": "catalog:",
     "citty": "catalog:",
     "hono": "catalog:",
     "zod": "catalog:"
@@ -199,10 +199,10 @@ packages:
   - "packages/*"
 
 catalog:
-  "@mariozechner/pi-ai": "^0.63.1"
-  "@mariozechner/pi-coding-agent": "^0.63.1"
-  "@mariozechner/pi-tui": "^0.63.1"
-  "@sinclair/typebox": "^0.34.0"
+  "@mariozechner/pi-ai": "^0.73.0"
+  "@mariozechner/pi-coding-agent": "^0.73.0"
+  "@mariozechner/pi-tui": "^0.73.0"
+  "typebox": "^1.1.38"
   "@types/bun": "^1.3.11"
   "@types/node": "^25.5.0"
   citty: "^0.1.6"
@@ -348,14 +348,14 @@ One install. Everything works.
 
 ```bash
 # Use just the proxy server in their own tool
-npm install @pi-proxy/server
+pnpm add @pi-proxy/server
 
 # Build a custom sync target
-npm install @pi-proxy/sync-contracts
+pnpm add @pi-proxy/sync-contracts
 # -> implement SyncTarget, publish as @their-org/pi-proxy-target-cursor
 
 # Use the sync engine with their custom target
-npm install @pi-proxy/sync-engine @their-org/pi-proxy-target-cursor
+pnpm add @pi-proxy/sync-engine @their-org/pi-proxy-target-cursor
 ```
 
 Nobody needs to install the aggregator extension to use individual packages.
