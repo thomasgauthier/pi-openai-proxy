@@ -6,7 +6,12 @@
  */
 
 import { describe, expect, test } from "bun:test";
-import type { AssistantMessage, AssistantMessageEvent, ToolCall, Usage } from "@earendil-works/pi-ai";
+import type {
+	AssistantMessage,
+	AssistantMessageEvent,
+	ToolCall,
+	Usage,
+} from "@earendil-works/pi-ai";
 import type { SSEChunk } from "@proxy/openai/sse";
 import { encodeDone, streamToSSE } from "@proxy/openai/sse";
 import { isRecord } from "@proxy/utils/guards";
