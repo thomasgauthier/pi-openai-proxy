@@ -258,7 +258,7 @@ Use `@pborck/pi-de` + a minimal Zed extension that writes `~/.pi/ide-selection.j
 - DeepWiki queries: `zed-industries/zed` (task system, MCP, terminal, agent panel), `badlogic/pi-mono` (extension API, RPC mode, IDE integration), `svkozak/pi-acp` (architecture)
 - npm search results for `pi-package` with IDE/editor keywords
 - Claude Code IDE Protocol spec: https://github.com/coder/claudecode.nvim/blob/main/PROTOCOL.md (full copy at `/tmp/claudecode-protocol.md`)
-- Pi extension docs: `@mariozechner/pi-coding-agent/docs/extensions.md`
+- Pi extension docs: `@earendil-works/pi-coding-agent/docs/extensions.md`
 - Archived Zed extension: https://github.com/isomoes/claude-code-zed
 - Zed discussions: https://github.com/zed-industries/zed/discussions/25498
 - ACP SDK: https://www.npmjs.com/package/@agentclientprotocol/sdk

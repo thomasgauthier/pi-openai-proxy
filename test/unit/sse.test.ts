@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { AssistantMessage, AssistantMessageEvent } from "@mariozechner/pi-ai";
+import type { AssistantMessage, AssistantMessageEvent } from "@earendil-works/pi-ai";
 import { encodeDone, encodeSSE, streamToSSE } from "@proxy/openai/sse";
 
 describe("encodeSSE", () => {

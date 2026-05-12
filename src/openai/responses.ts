@@ -13,7 +13,7 @@ import type {
 	TextContent,
 	ToolCall,
 	Usage,
-} from "@mariozechner/pi-ai";
+} from "@earendil-works/pi-ai";
 
 export interface OpenAIUsage {
 	readonly prompt_tokens: number;

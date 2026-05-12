@@ -55,8 +55,8 @@ Read `PLAN.md` first. This file should track concrete work items and decisions n
 - [x] Configure oxlint
 - [x] Choose the npm build tool and align docs and config
 - [x] Add Hono
-- [x] Add `@mariozechner/pi-coding-agent`
-- [x] Add `@mariozechner/pi-ai`
+- [x] Add `@earendil-works/pi-coding-agent`
+- [x] Add `@earendil-works/pi-ai`
 - [x] Add Zod
 - [x] Add test tooling
 - [x] Add `src/index.ts`

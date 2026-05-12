@@ -25,7 +25,7 @@ import { access } from "node:fs/promises";
 import { homedir } from "node:os";
 import { delimiter, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import type { Api, Model } from "@mariozechner/pi-ai";
+import type { Api, Model } from "@earendil-works/pi-ai";
 import {
 	AuthStorage,
 	type ExtensionAPI,
@@ -34,14 +34,14 @@ import {
 	getSettingsListTheme,
 	ModelRegistry,
 	SettingsManager,
-} from "@mariozechner/pi-coding-agent";
+} from "@earendil-works/pi-coding-agent";
 import {
 	type Component,
 	Container,
 	type SettingItem,
 	SettingsList,
 	Text,
-} from "@mariozechner/pi-tui";
+} from "@earendil-works/pi-tui";
 
 // Config schema -- single source of truth
 import {
@@ -768,7 +768,7 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 
 		// HACK: SettingsList has no public API for jumping to an index.
 		// Accesses private fields via bracket notation for provider jumping.
-		// Pinned to pi-tui behavior as of @mariozechner/pi-coding-agent ^0.63.1.
+		// Pinned to pi-tui behavior as of @earendil-works/pi-coding-agent ^0.63.1.
 		// Remove when SettingsList exposes a jumpTo/setSelectedIndex method.
 
 		// Isolated unsafe accessor for SettingsList private fields.

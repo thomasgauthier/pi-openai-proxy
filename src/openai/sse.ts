@@ -11,7 +11,7 @@
  * - Do not emit non-standard reasoning fields on the stable path
  */
 
-import type { AssistantMessageEvent, Usage } from "@mariozechner/pi-ai";
+import type { AssistantMessageEvent, Usage } from "@earendil-works/pi-ai";
 import { mapFinishReason, mapUsage } from "@proxy/openai/responses";
 
 export interface SSEChunk {

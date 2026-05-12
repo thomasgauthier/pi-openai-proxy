@@ -7,7 +7,7 @@
  * - Convert tool_choice to pi-compatible format
  */
 
-import type { Tool } from "@mariozechner/pi-ai";
+import type { Tool } from "@earendil-works/pi-ai";
 import { jsonSchemaToTypebox } from "@proxy/openai/json-schema-to-typebox";
 import type { OpenAIFunctionTool } from "@proxy/openai/schemas";
 import { type TSchema, Type } from "typebox";

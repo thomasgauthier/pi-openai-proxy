@@ -17,6 +17,6 @@ export default defineConfig({
 		return {};
 	},
 	deps: {
-		neverBundle: ["@mariozechner/pi-ai", "@mariozechner/pi-coding-agent"],
+		neverBundle: ["@earendil-works/pi-ai", "@earendil-works/pi-coding-agent"],
 	},
 });

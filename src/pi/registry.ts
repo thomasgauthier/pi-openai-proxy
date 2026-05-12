@@ -6,8 +6,8 @@
  * and exposes lookup functions used by the proxy routes.
  */
 
-import type { Api, Model } from "@mariozechner/pi-ai";
-import { AuthStorage, ModelRegistry, SettingsManager } from "@mariozechner/pi-coding-agent";
+import type { Api, Model } from "@earendil-works/pi-ai";
+import { AuthStorage, ModelRegistry, SettingsManager } from "@earendil-works/pi-coding-agent";
 
 let registry: ModelRegistry | undefined;
 let authStorage: AuthStorage | undefined;

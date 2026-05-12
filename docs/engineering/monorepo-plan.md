@@ -120,8 +120,8 @@ The proxy server. The only package with a build step (tsdown). Published with
     "zod": "catalog:"
   },
   "peerDependencies": {
-    "@mariozechner/pi-ai": "*",
-    "@mariozechner/pi-coding-agent": "*"
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*"
   }
 }
 ```
@@ -199,9 +199,9 @@ packages:
   - "packages/*"
 
 catalog:
-  "@mariozechner/pi-ai": "^0.73.0"
-  "@mariozechner/pi-coding-agent": "^0.73.0"
-  "@mariozechner/pi-tui": "^0.73.0"
+  "@earendil-works/pi-ai": "^0.73.0"
+  "@earendil-works/pi-coding-agent": "^0.73.0"
+  "@earendil-works/pi-tui": "^0.73.0"
   "typebox": "^1.1.38"
   "@types/bun": "^1.3.11"
   "@types/node": "^25.5.0"
@@ -302,9 +302,9 @@ pi-openai-proxy/
     "@pi-proxy/target-zed": "^0.1.0"
   },
   "peerDependencies": {
-    "@mariozechner/pi-ai": "*",
-    "@mariozechner/pi-coding-agent": "*",
-    "@mariozechner/pi-tui": "*"
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*"
   }
 }
 ```

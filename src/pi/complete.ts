@@ -12,8 +12,8 @@ import type {
 	Model,
 	SimpleStreamOptions,
 	ThinkingLevel,
-} from "@mariozechner/pi-ai";
-import { completeSimple, streamSimple } from "@mariozechner/pi-ai";
+} from "@earendil-works/pi-ai";
+import { completeSimple, streamSimple } from "@earendil-works/pi-ai";
 import type { ChatCompletionRequest, OpenAIFunctionTool } from "@proxy/openai/schemas";
 import { getRequestAuth } from "@proxy/pi/registry";
 import { isRecord } from "@proxy/utils/guards";

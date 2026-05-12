@@ -11,7 +11,7 @@
  */
 
 import { describe, expect, test } from "bun:test";
-import type { Api, Model } from "@mariozechner/pi-ai";
+import type { Api, Model } from "@earendil-works/pi-ai";
 import type { ModelExposureConfig } from "@proxy/openai/model-exposure";
 import { computeModelExposure, resolveExposedModel } from "@proxy/openai/model-exposure";
 

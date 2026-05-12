@@ -324,8 +324,8 @@ The extension detects externally running instances and shows their status via `/
 
 ### Pi SDK layers used
 
-- **`@mariozechner/pi-ai`** — `streamSimple()`, `completeSimple()`, `Model`, `Usage`, `AssistantMessageEvent`
-- **`@mariozechner/pi-coding-agent`** — `ModelRegistry`, `AuthStorage`
+- **`@earendil-works/pi-ai`** — `streamSimple()`, `completeSimple()`, `Model`, `Usage`, `AssistantMessageEvent`
+- **`@earendil-works/pi-coding-agent`** — `ModelRegistry`, `AuthStorage`
 
 ## Security defaults
 
