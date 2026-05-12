@@ -3,7 +3,7 @@
 
 ### Bug Fixes
 
-* migrate Pi SDK imports to `-works` packages and align package baseline
+* migrate Pi SDK imports to `@earendil-works` packages and align package baseline
 
 ## [4.9.5](https://github.com/victor-software-house/pi-openai-proxy/compare/v4.9.4...v4.9.5) (2026-05-06)
 
