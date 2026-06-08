@@ -1,3 +1,11 @@
+## [4.9.6](https://github.com/victor-software-house/pi-openai-proxy/compare/v4.9.5...v4.9.6) (2026-06-08)
+
+
+### Bug Fixes
+
+* migrate pi deps to [@earendil-works](https://github.com/earendil-works) namespace ([75dcc86](https://github.com/victor-software-house/pi-openai-proxy/commit/75dcc869d6661c0a14d6c975942f50cab9453ad8))
+* patch publish private GH packages ([d956bb2](https://github.com/victor-software-house/pi-openai-proxy/commit/d956bb2b1e2030c238b5628ecc1257e5d52c56db))
+
 ## [4.9.6](https://github.com/victor-software-house/pi-openai-proxy/compare/v4.9.5...v4.9.6) (2026-05-12)
 
 
