@@ -27,12 +27,11 @@ import { delimiter, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Api, Model } from "@earendil-works/pi-ai";
 import {
-	AuthStorage,
 	type ExtensionAPI,
 	type ExtensionCommandContext,
 	type ExtensionContext,
 	getSettingsListTheme,
-	ModelRegistry,
+	ModelRuntime,
 	SettingsManager,
 } from "@earendil-works/pi-coding-agent";
 import {
@@ -95,13 +94,16 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 
 	// --- Model registry access (cached, refreshed per call) ---
 
-	const cachedAuth = AuthStorage.create();
-	const cachedRegistry = ModelRegistry.create(cachedAuth);
+	let cachedRuntime: ModelRuntime | undefined;
+	const cachedRuntimePromise = ModelRuntime.create().then((runtime) => {
+		cachedRuntime = runtime;
+		return runtime;
+	});
 	const settingsManager = SettingsManager.create(process.cwd());
 
-	function getAvailableModels(): Model<Api>[] {
-		cachedRegistry.refresh();
-		return cachedRegistry.getAvailable();
+	async function getAvailableModels(): Promise<Model<Api>[]> {
+		const runtime = await cachedRuntimePromise;
+		return [...(await runtime.getAvailable())];
 	}
 
 	async function getEnabledModels(): Promise<readonly string[] | undefined> {
@@ -544,7 +546,7 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 		}
 
 		// Public ID preview (first 5 exposed models)
-		const models = getAvailableModels();
+		const models = await getAvailableModels();
 		const outcome = computeModelExposure(models, await buildExposureConfig());
 		if (outcome.ok && outcome.models.length > 0) {
 			const preview = outcome.models.slice(0, 5).map((m) => m.publicId);
@@ -564,7 +566,7 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 
 	async function showModels(ctx: ExtensionContext): Promise<void> {
 		config = loadConfigFromFile();
-		const models = getAvailableModels();
+		const models = await getAvailableModels();
 		const outcome = computeModelExposure(models, await buildExposureConfig());
 
 		if (!outcome.ok) {
@@ -609,7 +611,7 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 
 	async function verifyExposure(ctx: ExtensionContext): Promise<void> {
 		config = loadConfigFromFile();
-		const models = getAvailableModels();
+		const models = await getAvailableModels();
 		const issues: string[] = [];
 
 		// Check available models
@@ -653,7 +655,7 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 	 * Run Zed sync and return the result. Shared by the command and auto-sync.
 	 */
 	async function runZedSync(dryRun: boolean): Promise<{ ok: boolean; message: string }> {
-		const available = getAvailableModels();
+		const available = await getAvailableModels();
 		const outcome = computeModelExposure(available, await buildExposureConfig());
 		if (!outcome.ok) {
 			return { ok: false, message: `Model exposure error: ${outcome.message}` };
@@ -728,7 +730,7 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 		_currentValue: string,
 		done: (selectedValue?: string) => void,
 	): Component {
-		const models = getAvailableModels();
+		const models = cachedRuntime === undefined ? [] : cachedRuntime.getAvailableSnapshot();
 		const selected = new Set(config.customModels);
 
 		// Build provider order from sorted model list

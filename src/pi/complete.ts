@@ -13,7 +13,7 @@ import type {
 	SimpleStreamOptions,
 	ThinkingLevel,
 } from "@earendil-works/pi-ai";
-import { completeSimple, streamSimple } from "@earendil-works/pi-ai";
+import { completeSimple, streamSimple } from "@earendil-works/pi-ai/compat";
 import type { ChatCompletionRequest, OpenAIFunctionTool } from "@proxy/openai/schemas";
 import { getRequestAuth } from "@proxy/pi/registry";
 import { isRecord } from "@proxy/utils/guards";

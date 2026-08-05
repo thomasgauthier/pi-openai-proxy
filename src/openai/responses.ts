@@ -3,6 +3,7 @@
  *
  * Phase 0 contract:
  * - finish_reason: stop -> stop, length -> length, toolUse -> tool_calls
+ * - pending, error, and aborted -> stop
  * - Do not synthesize finish reasons pi cannot distinguish (e.g. content_filter)
  * - Usage maps pi Usage -> OpenAI usage with cache breakdowns under x_pi
  */
@@ -60,6 +61,7 @@ const FINISH_REASON_MAP: Record<StopReason, string> = {
 	stop: "stop",
 	length: "length",
 	toolUse: "tool_calls",
+	pending: "stop",
 	error: "stop",
 	aborted: "stop",
 };

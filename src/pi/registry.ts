@@ -1,25 +1,24 @@
 /**
- * Pi ModelRegistry, AuthStorage, and SettingsManager integration.
+ * Pi ModelRuntime, ModelRegistry, and SettingsManager integration.
  *
- * Initializes the model registry using pi's file-based auth and model storage,
+ * Initializes pi's asynchronous model runtime and synchronous registry facade,
  * reads the global `enabledModels` setting from pi's SettingsManager,
  * and exposes lookup functions used by the proxy routes.
  */
 
 import type { Api, Model } from "@earendil-works/pi-ai";
-import { AuthStorage, ModelRegistry, SettingsManager } from "@earendil-works/pi-coding-agent";
+import { ModelRegistry, ModelRuntime, SettingsManager } from "@earendil-works/pi-coding-agent";
 
 let registry: ModelRegistry | undefined;
-let authStorage: AuthStorage | undefined;
 let settingsManager: SettingsManager | undefined;
 
 /**
  * Initialize the registry and settings. Call once at startup.
  * Returns the load error if models.json failed to parse, or undefined on success.
  */
-export function initRegistry(): string | undefined {
-	authStorage = AuthStorage.create();
-	registry = ModelRegistry.create(authStorage);
+export async function initRegistry(): Promise<string | undefined> {
+	const runtime = await ModelRuntime.create();
+	registry = new ModelRegistry(runtime);
 	settingsManager = SettingsManager.create(process.cwd());
 	return registry.getError();
 }
@@ -29,13 +28,6 @@ export function getRegistry(): ModelRegistry {
 		throw new Error("ModelRegistry not initialized. Call initRegistry() first.");
 	}
 	return registry;
-}
-
-export function getAuthStorage(): AuthStorage {
-	if (authStorage === undefined) {
-		throw new Error("AuthStorage not initialized. Call initRegistry() first.");
-	}
-	return authStorage;
 }
 
 export function getSettingsManager(): SettingsManager {
