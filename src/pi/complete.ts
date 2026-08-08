@@ -501,8 +501,9 @@ async function buildStreamOptions(
 	model: Model<Api>,
 	request: ChatCompletionRequest,
 	options: CompletionOptions,
-): Promise<SimpleStreamOptions> {
+): Promise<{ model: Model<Api>; options: SimpleStreamOptions }> {
 	const opts: SimpleStreamOptions = {};
+	let requestModel = model;
 
 	// openai-codex-responses API does not support temperature
 	if (request.temperature !== undefined && model.api !== "openai-codex-responses") {
@@ -542,6 +543,9 @@ async function buildStreamOptions(
 		if (auth.apiKey !== undefined) {
 			opts.apiKey = auth.apiKey;
 		}
+		if (auth.baseUrl !== undefined) {
+			requestModel = { ...model, baseUrl: auth.baseUrl };
+		}
 		if (auth.headers !== undefined) {
 			opts.headers = auth.headers;
 		}
@@ -574,7 +578,7 @@ async function buildStreamOptions(
 		};
 	}
 
-	return opts;
+	return { model: requestModel, options: opts };
 }
 
 /**
@@ -586,8 +590,8 @@ export async function piComplete(
 	request: ChatCompletionRequest,
 	options: CompletionOptions,
 ): Promise<AssistantMessage> {
-	const opts = await buildStreamOptions(model, request, options);
-	return completeSimple(model, context, opts);
+	const prepared = await buildStreamOptions(model, request, options);
+	return completeSimple(prepared.model, context, prepared.options);
 }
 
 /**
@@ -599,6 +603,6 @@ export async function piStream(
 	request: ChatCompletionRequest,
 	options: CompletionOptions,
 ): Promise<AssistantMessageEventStream> {
-	const opts = await buildStreamOptions(model, request, options);
-	return streamSimple(model, context, opts);
+	const prepared = await buildStreamOptions(model, request, options);
+	return streamSimple(prepared.model, context, prepared.options);
 }

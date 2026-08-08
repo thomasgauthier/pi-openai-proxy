@@ -103,6 +103,7 @@ export default function proxyExtension(pi: ExtensionAPI): void {
 
 	async function getAvailableModels(): Promise<Model<Api>[]> {
 		const runtime = await cachedRuntimePromise;
+		await runtime.refresh({ allowNetwork: false });
 		return [...(await runtime.getAvailable())];
 	}
 

@@ -8,6 +8,7 @@ describe("mapFinishReason", () => {
 		["length", "length"],
 		["toolUse", "tool_calls"],
 		["pending", "stop"],
+		["deferred", "stop"],
 		["error", "stop"],
 		["aborted", "stop"],
 	];

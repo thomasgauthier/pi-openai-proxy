@@ -1,6 +1,6 @@
 # Pi package migration log
 
-Target: published stable `0.83.0`, excluding `/tmp/pi_src` `Unreleased` changes. The npm version listing contained no published `0.80.0` or `0.80.4`, so those source tags were not release checkpoints. All checkpoints used Node `v24.19.0`, the three direct pi packages were advanced together, and the focused gate was `bun test test/unit/` followed by build, typecheck, Biome, and Oxlint. The package manager overrides kept pi's related transitive `pi-agent-core` and `pi-tui` releases aligned while testing historical checkpoints; the final direct TypeBox dependency is also aligned to pi 0.83's `1.3.7` requirement.
+Target: published stable `0.84.1`, excluding `/tmp/pi_src` `Unreleased` changes. The npm version listing contained no published `0.80.0` or `0.80.4`, so those source tags were not release checkpoints. All checkpoints used Node `v24.19.0`, the three direct pi packages were advanced together, and the focused gate was `bun test test/unit/` followed by build, typecheck, Biome, and Oxlint. The package manager overrides kept pi's related transitive `pi-agent-core` and `pi-tui` releases aligned while testing historical checkpoints; the final direct TypeBox dependency is also aligned to pi 0.84's `1.3.7` requirement.
 
 | Release | Result | Notes |
 |---|---|---|
@@ -41,14 +41,17 @@ Target: published stable `0.83.0`, excluding `/tmp/pi_src` `Unreleased` changes.
 | 0.82.0 | green | 275 unit tests; build/typecheck/lint green |
 | 0.82.1 | green | 275 unit tests; build/typecheck/lint green |
 | 0.83.0 | green | Added `pending` stop-reason mapping; 276 unit tests; final gates green |
+| 0.84.0 | green | Added `deferred` stop-reason mapping, forwarded auth-resolved base URLs, and refreshed extension model catalogs; 310 CI tests; build/typecheck green |
+| 0.84.1 | green | Published patch checkpoint; 310 CI tests; build/typecheck green |
 
 ## Final evidence
 
-- `pnpm test` (30s per-test timeout for real-provider conformance): **316 passed, 0 failed**, 1,241 assertions across 22 files.
+- `pnpm test` (30s per-test timeout for real-provider conformance): **317 passed, 0 failed**, 1,270 assertions across 22 files.
+- `pnpm run test:ci`: **310 passed, 0 failed**, 1,217 assertions across 18 files.
 - `pnpm run typecheck`: passed.
 - `pnpm run lint:biome` and `pnpm run lint:oxlint`: passed.
 - `pnpm run build`: passed; all package entrypoints generated, and `bun dist/index.mjs --help` passed.
-- `pnpm install --frozen-lockfile`: passed with direct pi packages at `0.83.0`.
-- `GET /v1/models`, encoded model lookup, chat validation, streaming, tools, auth, and security conformance passed.
+- `pnpm install --frozen-lockfile`: passed with direct pi packages at `0.84.1`.
+- `GET /v1/models`, encoded model lookup, chat validation, streaming, tools, auth, and security conformance passed at 0.84.1.
 
 The configured aggregate lint command was also run through pnpm's CLI entrypoint and passed.

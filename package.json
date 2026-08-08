@@ -73,9 +73,9 @@
     "prepublishOnly": "pnpm test && pnpm run build"
   },
   "dependencies": {
-    "@earendil-works/pi-ai": "0.83.0",
-    "@earendil-works/pi-coding-agent": "0.83.0",
-    "@earendil-works/pi-tui": "0.83.0",
+    "@earendil-works/pi-ai": "0.84.1",
+    "@earendil-works/pi-coding-agent": "0.84.1",
+    "@earendil-works/pi-tui": "0.84.1",
     "citty": "^0.2.2",
     "hono": "^4.12.18",
     "jsonc-parser": "^3.3.1",
